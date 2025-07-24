@@ -25,7 +25,7 @@ def calculate_crew_estimation(start_date, today_date, original_duration, total_c
     progress_rate = (progress / 100) / elapsed_days if elapsed_days > 0 else 0
     estimated_total_duration = max(int(round(1 / progress_rate)), 1) if progress_rate > 0 else 0
 
-    predicted_finish = add_working_days(start_date, estimated_total_duration - 1)
+    predicted_finish = add_working_days(start_date, estimated_total_duration)
     predicted_duration = working_days(start_date, predicted_finish)
 
     delay = predicted_duration - original_duration
