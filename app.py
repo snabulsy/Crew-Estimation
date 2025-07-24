@@ -73,7 +73,7 @@ with st.form("input_form"):
     today_date = st.text_input("Today's Date (DD-MM-YYYY)")
     original_duration = st.number_input("Original Duration (in working days)", min_value=1)
     total_labor = st.number_input("Total Labor Assigned to Activity", min_value=1)
-    progress = st.number_input("📈 Progress (%)", min_value=0.0, max_value=100.0, step=0.1)
+    progress = st.number_input("Progress (%)", min_value=0.0, max_value=100.0, step=0.1)
     required_end_date_str = st.text_input("Required Finish Date (DD-MM-YYYY) (Optional)", value="")
     submitted = st.form_submit_button("Calculate")
 
