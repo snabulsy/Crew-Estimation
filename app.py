@@ -50,19 +50,21 @@ def calculate_labor_estimation(start_date, today_date, original_duration, total_
     labor_needed_for_original = remaining_labor / remaining_days_for_original_plan if remaining_days_for_original_plan > 0 else 0
 
     return {
+        "Estimated Total Duration": estimated_total_duration,
+        "Labor Needed to Finish by Original Duration": round(labor_needed_for_original, 2),
         "Predicted Finish Date": predicted_finish.strftime('%d-%m-%Y'),
         "Predicted Duration (Working Days)": predicted_duration,
         "Delay (Working Days)": delay,
         "Elapsed Working Days": elapsed_days,
         "Progress Rate Per Day": round(progress_rate, 4),
-        "Estimated Total Duration": estimated_total_duration,
+
         "Remaining Duration": remaining_duration,
         "Remaining Labor": round(remaining_labor, 2),
         "Labor Needed Per Day": round(labor_per_day, 2),
         "Required Finish Date": required_end_date.strftime('%d-%m-%Y') if required_end_date else "N/A",
         "Working Days to Required Finish": remaining_days_user_target,
-        "Labor Needed to Meet Target Date": round(labor_needed_for_target, 2) if labor_needed_for_target is not None else "N/A",
-        "Labor Needed to Finish by Original Duration": round(labor_needed_for_original, 2)
+        "Labor Needed to Meet Target Date": round(labor_needed_for_target, 2) if labor_needed_for_target is not None else "N/A"
+
     }
 
 # === Streamlit Interface ===
