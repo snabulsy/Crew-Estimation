@@ -50,7 +50,6 @@ def calculate_labor_estimation(start_date, today_date, original_duration, total_
     labor_needed_for_original = remaining_labor / remaining_days_for_original_plan if remaining_days_for_original_plan > 0 else 0
 
     return {
-        "Estimated Total Duration": estimated_total_duration,
         "Labor Needed to Finish by Original Duration": round(labor_needed_for_original, 2),
         "Predicted Finish Date": predicted_finish.strftime('%d-%m-%Y'),
         "Predicted Duration (Working Days)": predicted_duration,
