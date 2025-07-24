@@ -69,12 +69,12 @@ def calculate_labor_estimation(start_date, today_date, original_duration, total_
 st.title("Labor Estimation Tool")
 
 with st.form("input_form"):
-    start_date = st.text_input("📅 Start Date (DD-MM-YYYY)")
-    today_date = st.text_input("📅 Today's Date (DD-MM-YYYY)")
-    original_duration = st.number_input("⏳ Original Duration (in working days)", min_value=1)
-    total_labor = st.number_input("👷 Total Labor Assigned to Activity", min_value=1)
+    start_date = st.text_input("Start Date (DD-MM-YYYY)")
+    today_date = st.text_input("Today's Date (DD-MM-YYYY)")
+    original_duration = st.number_input("Original Duration (in working days)", min_value=1)
+    total_labor = st.number_input("Total Labor Assigned to Activity", min_value=1)
     progress = st.number_input("📈 Progress (%)", min_value=0.0, max_value=100.0, step=0.1)
-    required_end_date_str = st.text_input("🎯 Required Finish Date (DD-MM-YYYY) (Optional)", value="")
+    required_end_date_str = st.text_input("Required Finish Date (DD-MM-YYYY) (Optional)", value="")
     submitted = st.form_submit_button("Calculate")
 
 if submitted:
@@ -87,7 +87,7 @@ if submitted:
             start, today, original_duration, total_labor, progress, required_end_date
         )
 
-        st.subheader("📊 Results")
+        st.subheader("Results")
         for k, v in results.items():
             st.write(f"**{k}:** {v}")
     except Exception as e:
