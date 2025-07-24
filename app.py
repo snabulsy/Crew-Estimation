@@ -2,15 +2,19 @@ from datetime import datetime, timedelta
 import streamlit as st
 
 # === Helper Functions ===
+
 def parse_date(date_str):
+    """Parse date from string in format DD-MM-YYYY"""
     return datetime.strptime(date_str, '%d-%m-%Y').date()
 
 def working_days(start, end):
+    """Count working days excluding Fridays (weekday 4), inclusive"""
     delta = end - start
     days = [start + timedelta(days=i) for i in range(delta.days + 1)]
     return len([day for day in days if day.weekday() != 4])  # 4 = Friday
 
 def add_working_days(start, num_days):
+    """Add working days (excluding Fridays) to a start date"""
     current = start
     added = 0
     while added < num_days:
@@ -21,14 +25,32 @@ def add_working_days(start, num_days):
 
 def calculate_crew_estimation(start_date, today_date, original_duration, total_crew, progress):
     elapsed_days = working_days(start_date, today_date)
-    progress_rate = progress / 100 / elapsed_days if elapsed_days > 0 else 0
-    estimated_total_duration = int(1 / progress_rate) if progress_rate > 0 else 0
-    remaining_duration = estimated_total_duration - elapsed_days
+
+    # If progress or elapsed days are 0 → handle edge case
+    if progress <= 0 or elapsed_days <= 0:
+        return {
+            "Predicted Finish Date": "N/A",
+            "Predicted Duration": 0,
+            "Delay": 0,
+            "Elapsed Days": elapsed_days,
+            "Progress Rate": 0,
+            "Estimated Total Duration": 0,
+            "Remaining Duration": 0,
+            "Remaining Crew": total_crew,
+            "Crew Needed Per Day": 0
+        }
+
+    # Estimate based on progress so far
+    progress_rate = progress / 100 / elapsed_days
+    estimated_total_duration = max(int(1 / progress_rate), 1)
+    remaining_duration = max(estimated_total_duration - elapsed_days, 1)
+
     predicted_finish = add_working_days(today_date, remaining_duration)
     predicted_duration = working_days(start_date, predicted_finish)
     delay = predicted_duration - original_duration
+
     remaining_crew = total_crew * (1 - progress / 100)
-    crew_per_day = remaining_crew / remaining_duration if remaining_duration > 0 else 0
+    crew_per_day = remaining_crew / remaining_duration
 
     return {
         "Predicted Finish Date": predicted_finish.strftime('%d-%m-%Y'),
@@ -43,11 +65,13 @@ def calculate_crew_estimation(start_date, today_date, original_duration, total_c
     }
 
 # === Streamlit Interface ===
-st.title("Crew Estimation Web Calculator")
+
+st.title("Crew Estimation Web Calculator 👷‍♂️")
 
 with st.form("input_form"):
-    start_date = st.text_input("Start Date (DD-MM-YYYY)")
-    today_date = st.text_input("Today's Date (DD-MM-YYYY)")
+    st.markdown("### Input Project Data")
+    start_date = st.text_input("Start Date (DD-MM-YYYY)", placeholder="e.g. 20-07-2025")
+    today_date = st.text_input("Today's Date (DD-MM-YYYY)", placeholder="e.g. 24-07-2025")
     original_duration = st.number_input("Original Duration (in days)", min_value=1)
     total_crew = st.number_input("Total Crew for Activity", min_value=1)
     progress = st.number_input("Progress (%)", min_value=0.0, max_value=100.0, step=0.1)
@@ -59,8 +83,8 @@ if submitted:
         today = parse_date(today_date)
         results = calculate_crew_estimation(start, today, original_duration, total_crew, progress)
 
-        st.subheader("Results")
+        st.subheader("📊 Results")
         for k, v in results.items():
             st.write(f"**{k}:** {v}")
     except Exception as e:
-        st.error(f"Error: {str(e)}")
+        st.error(f"⚠️ Error: {str(e)}")
