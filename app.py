@@ -66,7 +66,7 @@ def calculate_labor_estimation(start_date, today_date, original_duration, total_
     }
 
 # === Streamlit Interface ===
-st.title("🔧 Labor Estimation Tool")
+st.title("Labor Estimation Tool")
 
 with st.form("input_form"):
     start_date = st.text_input("📅 Start Date (DD-MM-YYYY)")
